@@ -29,6 +29,13 @@
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -57,7 +64,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>core</artifactId>
+			<version>4.9.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -65,6 +76,39 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.web3j</groupId>
+				<artifactId>web3j-maven-plugin</artifactId>
+				<version>4.5.11</version>
+				<configuration>
+					<packageName>com.zuehlke.blockchain.model</packageName>
+					<sourceDestination>src/main/java/generated</sourceDestination>
+					<nativeJavaType>true</nativeJavaType>
+					<outputFormat>java,bin</outputFormat>
+					<soliditySourceFiles>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>**/*.sol</include>
+						</includes>
+					</soliditySourceFiles>
+					<outputDirectory>
+						<java>src/java/generated</java>
+						<bin>src/bin/generated</bin>
+						<abi>src/abi/generated</abi>
+					</outputDirectory>
+					<contract>
+						<includes>
+							<include>greeter</include>
+						</includes>
+						<excludes>
+							<exclude>mortal</exclude>
+						</excludes>
+					</contract>
+					<pathPrefixes>
+						<pathPrefix>dep=../dependencies</pathPrefix>
+					</pathPrefixes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

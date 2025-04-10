@@ -1,25 +1,32 @@
 package com.matheus.blockchain.BlockJava.controller;
 
-import com.matheus.blockchain.BlockJava.service.BigchainDBService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/registro")
 public class RegistroController {
 
-    private final BigchainDBService bigchainDBService;
+    private final EthereumService ethereumService;
 
-    public RegistroController(BigchainDBService bigchainDBService) {
-        this.bigchainDBService = bigchainDBService;
+    public RegistroController(EthereumService ethereumService) {
+        this.ethereumService = ethereumService;
     }
 
     @PostMapping
     public String registrar(@RequestBody String data) {
+        // Gera o hash do dado
         String dataHash = generateHash(data);
-        return bigchainDBService.registerData(dataHash);
+
+        // Registra o hash no Ethereum
+        try {
+            ethereumService.registerData(dataHash, "yourPrivateKeyHere");
+            return "Dado registrado no Ethereum!";
+        } catch (Exception e) {
+            return "Erro: " + e.getMessage();
+        }
     }
 
     private String generateHash(String data) {
-        return Integer.toHexString(data.hashCode());
+        return Integer.toHexString(data.hashCode());  // Exemplo simples de geração de hash
     }
 }
