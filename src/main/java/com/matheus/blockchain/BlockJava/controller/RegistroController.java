@@ -1,5 +1,5 @@
 package com.matheus.blockchain.BlockJava.controller;
-
+import com.matheus.blockchain.BlockJava.service.EthereumService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,10 +14,7 @@ public class RegistroController {
 
     @PostMapping
     public String registrar(@RequestBody String data) {
-        // Gera o hash do dado
         String dataHash = generateHash(data);
-
-        // Registra o hash no Ethereum
         try {
             ethereumService.registerData(dataHash, "yourPrivateKeyHere");
             return "Dado registrado no Ethereum!";
@@ -27,6 +24,6 @@ public class RegistroController {
     }
 
     private String generateHash(String data) {
-        return Integer.toHexString(data.hashCode());  // Exemplo simples de geração de hash
+        return Integer.toHexString(data.hashCode());
     }
 }
